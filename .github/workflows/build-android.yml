@@ -1,0 +1,32 @@
+name: Build Flet Android APK
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Flet
+      run: |
+        pip install flet flet-cli
+
+    - name: Build Android APK
+      run: |
+        flet build apk --project-name MonAppFlet --android
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: MonApp-APK
+        path: build/android/*.apk
